@@ -1,12 +1,10 @@
 import nprogress from 'nprogress'
 
-export NprogressContainer from './NprogressContainer.vue'
-
 export default class NProgress {
 
   static install (Vue) {
-    if (install.installed) return
-    install.installed = true
+    if (this.installed) return
+    this.installed = true
 
     Object.defineProperty(Vue.prototype, '$nprogress', {
       get () { return this.$root._nprogress }
@@ -14,9 +12,31 @@ export default class NProgress {
 
     Vue.mixin({
       beforeCreate () {
-        if (this.$options.nprogress) {
-          this._nprogress = this.$options.nprogress
-          this._nprogress.init(this)
+        const np = this.$options.nprogress
+        if (np) {
+          this._nprogress = np
+          np.init(this)
+
+          if (Vue.http) {
+            Vue.http.interceptors.push((request, next) => {
+              np.inc(0.2)
+              next(response => {
+                np.done()
+                return response
+              })
+            })
+          }
+
+          const router = this.$options.router
+          if (router) {
+            router.beforeEach((route, redirect, next) => {
+              np.start()
+              next()
+            })
+            router.afterEach(() => {
+              np.done()
+            })
+          }
         }
       }
     })
@@ -24,7 +44,6 @@ export default class NProgress {
 
   constructor (options = {}) {
     this.app = null
-    this.getPrototypeOf(NProgress)
     this.configure(options)
   }
 
@@ -33,3 +52,5 @@ export default class NProgress {
   }
 
 }
+
+Object.setPrototypeOf(NProgress.prototype, nprogress)

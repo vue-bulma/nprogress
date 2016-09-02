@@ -2,6 +2,12 @@
   <div class="nprogress-container"></div>
 </template>
 
-<style>
-@import '~nprogress/nprogress';
+<script>
+export default {
+  name: 'nprogress-container'
+}
+</script>
+
+<style lang="scss">
+@import '~nprogress/nprogress.css';
 </style>
