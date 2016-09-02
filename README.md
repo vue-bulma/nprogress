@@ -10,6 +10,22 @@ $ npm install vue-nprogress
 
 ## Examples
 
+```vue
+<template>
+  <nprogress-container></nprogress-container>
+</template>
+
+<script>
+import NprogressContainer from 'vue-nprogress/src/NprogressContainer'
+
+export default {
+  components: {
+    NprogressContainer
+  }
+}
+</script>
+```
+
 ```js
 import Vue from 'vue'
 import NProgress from 'vue-nprogress'
@@ -17,7 +33,7 @@ import App from './App.vue'
 
 Vue.use(NProgress)
 
-const nprogress = new NProgress()
+const nprogress = new NProgress({ parent: '.nprogress-container' })
 
 const app = new Vue({
   nprogress
