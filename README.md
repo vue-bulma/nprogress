@@ -29,7 +29,8 @@ const app = new Vue({
 // app.nprogress.start()
 // app.nprogress.inc(0.2)
 // app.nprogress.done()
-// ..
+// Component:
+// this.$nprogress
 ```
 
 ## Badges
