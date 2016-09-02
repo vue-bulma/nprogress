@@ -11,6 +11,25 @@ $ npm install vue-nprogress
 ## Examples
 
 ```vue
+import Vue from 'vue'
+import NProgress from 'vue-nprogress'
+import App from './App.vue'
+
+Vue.use(NProgress)
+
+const nprogress = new NProgress()
+
+const app = new Vue({
+  nprogress
+  ...App
+})
+
+// APIs: see https://github.com/rstacruz/nprogress
+// app.nprogress
+// app.nprogress.start()
+// app.nprogress.inc(0.2)
+// app.nprogress.done()
+// ..
 ```
 
 ## Badges
