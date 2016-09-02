@@ -1,6 +1,6 @@
 import nprogress from 'nprogress'
 
-export Nprogress from './Nprogress.vue'
+export NprogressContainer from './NprogressContainer.vue'
 
 export default class NProgress {
 
