@@ -1,0 +1,22 @@
+{
+  "name": "vue-nprogress",
+  "version": "0.0.0",
+  "description": "Slim progress bars is based on nprogress for Ajax'y applications",
+  "main": "src/index.js",
+  "peerDependencies": {
+    "vue": ">=2.0.0-beta.0"
+  },
+  "scripts": {},
+  "repository": "git+https://github.com/vue-bulma/nprogress.git",
+  "keywords": [
+    "vue",
+    "vue-nprogress",
+    "nprogress",
+    "ajax"
+  ],
+  "author": "Fangdun Cai <cfddream@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "nprogress": "0.2.0"
+  }
+}
