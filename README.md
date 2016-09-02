@@ -10,7 +10,7 @@ $ npm install vue-nprogress
 
 ## Examples
 
-```vue
+```js
 import Vue from 'vue'
 import NProgress from 'vue-nprogress'
 import App from './App.vue'
