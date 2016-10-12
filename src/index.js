@@ -10,7 +10,7 @@ function install (Vue) {
 
   Vue.mixin({
     beforeCreate: function beforeEach () {
-      const np = this.$options.nprogress
+      var np = this.$options.nprogress
       if (np) {
         this._nprogress = np
         np.init(this)
@@ -25,7 +25,7 @@ function install (Vue) {
           })
         }
 
-        const router = this.$options.router
+        var router = this.$options.router
         if (router) {
           router.beforeEach(function (route, redirect, next) {
             np.start()
