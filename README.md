@@ -5,8 +5,12 @@ Slim progress bars is based on [nprogress](https://github.com/rstacruz/nprogress
 ## Installation
 
 ```
-$ npm install vue-nprogress
+$ npm install nprogress --save
+$ npm install vue-nprogress --save
 ```
+Add `nprogress.css` to your page, or by using module bundler (e.g. webpack) 
+`require('nprogress/nprogress.css');`
+
 
 ## Examples
 
@@ -47,6 +51,38 @@ const app = new Vue({
 // app.nprogress.done()
 // Component:
 // this.$nprogress
+```
+
+## Configuration
+
+```js
+const options = {
+  latencyThreshold: 200, // Number of ms before progressbar starts showing, default: 100,
+  router: true, // Show progressbar when navigating routes, default: true
+  http: false // Show progressbar when doing Vue.http, default: true
+};
+Vue.use(NProgress, options)
+```
+
+In order to overwrite the configuration for certain requests, use showProgressBar parameter in request/route's meta.
+
+Like this:
+
+```js
+Vue.http.get('/url', { showProgressBar: false })
+```
+```js
+const router = new VueRouter({
+  routes: [
+    {
+      path: '/foo',
+      component: Foo,
+      meta: {
+        showProgressBar: false
+      }
+    }
+  ]
+})
 ```
 
 ## Badges
