@@ -39,8 +39,7 @@ function install(Vue, options = {}) {
             setTimeout(() => np.start(), latencyThreshold)
           }
           requestsTotal++
-          const completed = requestsCompleted / requestsTotal
-          np.set(completed)
+          np.set(requestsCompleted / requestsTotal)
         }
 
         function increase() {
@@ -50,8 +49,7 @@ function install(Vue, options = {}) {
             if (requestsCompleted >= requestsTotal) {
               setComplete()
             } else {
-              const completed = (requestsCompleted / requestsTotal) - 0.1
-              np.set(completed)
+              np.set((requestsCompleted / requestsTotal) - 0.1)
             }
           }, latencyThreshold + 50)
         }
@@ -74,13 +72,12 @@ function install(Vue, options = {}) {
 
         const router = applyOnRouter && this.$options.router
         if (router) {
-          router.beforeEach((route, redirect, next) => {
+          router.beforeEach((route, from, next) => {
             const showProgressBar = 'showProgressBar' in route.meta ? route.meta.showProgressBar : applyOnRouter
             if (showProgressBar) initProgress()
-
             next()
           })
-          router.afterEach(() => {
+          router.afterEach(route => {
             const showProgressBar = 'showProgressBar' in route.meta ? route.meta.showProgressBar : applyOnRouter
             if (showProgressBar) increase()
           })
