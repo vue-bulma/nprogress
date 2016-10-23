@@ -12,6 +12,12 @@
 
 nprogress = 'default' in nprogress ? nprogress['default'] : nprogress;
 
+var defaults = {
+  latencyThreshold: 100,
+  router: true,
+  http: true
+};
+
 function install(Vue) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -24,17 +30,15 @@ function install(Vue) {
     }
   });
 
-  var latencyThreshold = options.latencyThreshold || 100;
+  options = Object.assign({}, defaults, options);
 
   Vue.mixin({
-    beforeCreate: function beforeEach() {
+    beforeCreate: function () {
       var _this = this;
 
       var np = this.$options.nprogress;
 
       if (np) {
-        var router;
-
         (function () {
           var setComplete = function () {
             requestsTotal = 0;
@@ -43,14 +47,13 @@ function install(Vue) {
           };
 
           var initProgress = function () {
-            var completed = void 0;
-            if (requestsTotal === 0) {
+            if (0 === requestsTotal) {
               setTimeout(function () {
-                np.start();
+                return np.start();
               }, latencyThreshold);
             }
             requestsTotal++;
-            completed = requestsCompleted / requestsTotal;
+            var completed = requestsCompleted / requestsTotal;
             np.set(completed);
           };
 
@@ -69,46 +72,40 @@ function install(Vue) {
 
           var requestsTotal = 0;
           var requestsCompleted = 0;
-          var applyOnRouter = options.router == undefined || options.router;
-          var applyOnHttp = options.http == undefined || options.http;
+          var _options = options;
+          var latencyThreshold = _options.latencyThreshold;
+          var applyOnRouter = _options.router;
+          var applyOnHttp = _options.http;
+
 
           _this._nprogress = np;
           np.init(_this);
 
-          if (Vue.http) {
-            Vue.http.interceptors.push(function (request, next) {
-              var showProgressBar = applyOnHttp;
-              if (request.showProgressBar != null) {
-                showProgressBar = request.showProgressBar;
-              }
-
+          var http = applyOnHttp && Vue.http;
+          if (http) {
+            http.interceptors.push(function (request, next) {
+              var showProgressBar = 'showProgressBar' in request ? request.showProgressBar : applyOnHttp;
               if (showProgressBar) initProgress();
 
               next(function (response) {
                 if (!showProgressBar) return response;
-
                 increase();
               });
             });
           }
 
-          router = _this.$options.router;
-
+          var router = applyOnRouter && _this.$options.router;
           if (router) {
-            (function () {
-              var showProgressBar = void 0;
-              router.beforeEach(function (route, redirect, next) {
-                showProgressBar = applyOnRouter;
-                if (route.meta.showProgressBar != null) {
-                  showProgressBar = route.meta.showProgressBar;
-                }
-                if (showProgressBar) initProgress();
-                next();
-              });
-              router.afterEach(function () {
-                if (showProgressBar) increase();
-              });
-            })();
+            router.beforeEach(function (route, redirect, next) {
+              var showProgressBar = 'showProgressBar' in route.meta ? route.meta.showProgressBar : applyOnRouter;
+              if (showProgressBar) initProgress();
+
+              next();
+            });
+            router.afterEach(function () {
+              var showProgressBar = 'showProgressBar' in route.meta ? route.meta.showProgressBar : applyOnRouter;
+              if (showProgressBar) increase();
+            });
           }
         })();
       }
