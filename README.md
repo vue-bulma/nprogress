@@ -6,13 +6,8 @@ Slim progress bars is based on [nprogress](https://github.com/rstacruz/nprogress
 ## Installation
 
 ```console
-$ npm install nprogress --save
 $ npm install vue-nprogress --save
 ```
-
-Add `nprogress.css` to your page, or by using module bundler (e.g. webpack) 
-`require('nprogress/nprogress.css');`
-
 
 ## Examples
 

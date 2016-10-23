@@ -24,9 +24,11 @@
   },
   "devDependencies": {
     "babel-preset-es2015-loose-rollup": "^7.0.0",
-    "nprogress": "^0.2.0",
     "rollup": "^0.36.3",
     "rollup-plugin-babel": "^2.6.1",
     "uglify-js": "^2.7.3"
+  },
+  "dependencies": {
+    "nprogress": "0.2.0"
   }
 }
