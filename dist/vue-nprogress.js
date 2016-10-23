@@ -53,8 +53,7 @@ function install(Vue) {
               }, latencyThreshold);
             }
             requestsTotal++;
-            var completed = requestsCompleted / requestsTotal;
-            np.set(completed);
+            np.set(requestsCompleted / requestsTotal);
           };
 
           var increase = function () {
@@ -64,8 +63,7 @@ function install(Vue) {
               if (requestsCompleted >= requestsTotal) {
                 setComplete();
               } else {
-                var completed = requestsCompleted / requestsTotal - 0.1;
-                np.set(completed);
+                np.set(requestsCompleted / requestsTotal - 0.1);
               }
             }, latencyThreshold + 50);
           };
@@ -96,13 +94,12 @@ function install(Vue) {
 
           var router = applyOnRouter && _this.$options.router;
           if (router) {
-            router.beforeEach(function (route, redirect, next) {
+            router.beforeEach(function (route, from, next) {
               var showProgressBar = 'showProgressBar' in route.meta ? route.meta.showProgressBar : applyOnRouter;
               if (showProgressBar) initProgress();
-
               next();
             });
-            router.afterEach(function () {
+            router.afterEach(function (route) {
               var showProgressBar = 'showProgressBar' in route.meta ? route.meta.showProgressBar : applyOnRouter;
               if (showProgressBar) increase();
             });
