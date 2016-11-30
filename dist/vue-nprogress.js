@@ -1,5 +1,5 @@
 /*!
- * nprogress v0.1.1
+ * nprogress v0.1.2
  * https://github.com/vue-bulma/nprogress
  * Released under the MIT License.
  */
@@ -70,11 +70,12 @@ function install(Vue) {
 
           var requestsTotal = 0;
           var requestsCompleted = 0;
-          var _options = options;
-          var latencyThreshold = _options.latencyThreshold;
-          var applyOnRouter = _options.router;
-          var applyOnHttp = _options.http;
+          var _options = options,
+              latencyThreshold = _options.latencyThreshold,
+              applyOnRouter = _options.router,
+              applyOnHttp = _options.http;
 
+          var confirmed = true;
 
           _this._nprogress = np;
           np.init(_this);
@@ -96,12 +97,18 @@ function install(Vue) {
           if (router) {
             router.beforeEach(function (route, from, next) {
               var showProgressBar = 'showProgressBar' in route.meta ? route.meta.showProgressBar : applyOnRouter;
-              if (showProgressBar) initProgress();
+              if (showProgressBar && confirmed) {
+                initProgress();
+                confirmed = false;
+              }
               next();
             });
             router.afterEach(function (route) {
               var showProgressBar = 'showProgressBar' in route.meta ? route.meta.showProgressBar : applyOnRouter;
-              if (showProgressBar) increase();
+              if (showProgressBar) {
+                increase();
+                confirmed = true;
+              }
             });
           }
         })();

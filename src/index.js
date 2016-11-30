@@ -27,6 +27,7 @@ function install(Vue, options = {}) {
         let requestsTotal = 0
         let requestsCompleted = 0
         let { latencyThreshold, router: applyOnRouter, http: applyOnHttp } = options
+        let confirmed = true
 
         function setComplete() {
           requestsTotal = 0
@@ -74,12 +75,18 @@ function install(Vue, options = {}) {
         if (router) {
           router.beforeEach((route, from, next) => {
             const showProgressBar = 'showProgressBar' in route.meta ? route.meta.showProgressBar : applyOnRouter
-            if (showProgressBar) initProgress()
+            if (showProgressBar && confirmed) {
+              initProgress()
+              confirmed = false
+            }
             next()
           })
           router.afterEach(route => {
             const showProgressBar = 'showProgressBar' in route.meta ? route.meta.showProgressBar : applyOnRouter
-            if (showProgressBar) increase()
+            if (showProgressBar) {
+              increase()
+              confirmed = true
+            }
           })
         }
       }
