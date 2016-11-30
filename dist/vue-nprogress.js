@@ -1,5 +1,5 @@
 /*!
- * nprogress v0.1.2
+ * nprogress v0.1.3
  * https://github.com/vue-bulma/nprogress
  * Released under the MIT License.
  */
@@ -70,10 +70,10 @@ function install(Vue) {
 
           var requestsTotal = 0;
           var requestsCompleted = 0;
-          var _options = options,
-              latencyThreshold = _options.latencyThreshold,
-              applyOnRouter = _options.router,
-              applyOnHttp = _options.http;
+          var _options = options;
+          var latencyThreshold = _options.latencyThreshold;
+          var applyOnRouter = _options.router;
+          var applyOnHttp = _options.http;
 
           var confirmed = true;
 
