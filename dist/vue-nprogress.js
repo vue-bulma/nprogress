@@ -1,5 +1,5 @@
 /*!
- * nprogress v0.1.3
+ * nprogress v0.1.4
  * https://github.com/vue-bulma/nprogress
  * Released under the MIT License.
  */
@@ -122,13 +122,13 @@ function NProgress(options) {
   this.configure(options || {});
 }
 
-NProgress.prototype.init = function (app) {
-  this.app = app;
-};
-
 NProgress.install = install;
 
-Object.setPrototypeOf(NProgress.prototype, nprogress);
+Object.assign(NProgress.prototype, nprogress, {
+  init: function (app) {
+    this.app = app;
+  }
+});
 
 return NProgress;
 
