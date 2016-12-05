@@ -99,12 +99,12 @@ function NProgress(options) {
   this.configure(options || {})
 }
 
-NProgress.prototype.init = function (app) {
-  this.app = app
-}
-
 NProgress.install = install
 
-Object.setPrototypeOf(NProgress.prototype, nprogress)
+Object.assign(NProgress.prototype, nprogress, {
+  init (app) {
+    this.app = app
+  }
+})
 
 export default NProgress
