@@ -58,17 +58,37 @@ function install(Vue, options = {}) {
         this._nprogress = np
         np.init(this)
 
-        const http = applyOnHttp && Vue.http
-        if (http) {
-          http.interceptors.push((request, next) => {
-            const showProgressBar = 'showProgressBar' in request ? request.showProgressBar : applyOnHttp
-            if (showProgressBar) initProgress()
+        if (applyOnHttp) {
+          const http = Vue.http
+          const axios = Vue.axios
 
-            next(response => {
-              if (!showProgressBar) return response
-              increase()
+          if (http) {
+            http.interceptors.push((request, next) => {
+              const showProgressBar = 'showProgressBar' in request ? request.showProgressBar : applyOnHttp
+              if (showProgressBar) initProgress()
+
+              next(response => {
+                if (!showProgressBar) return response
+                increase()
+              })
             })
-          })
+          } else if (axios) {
+            axios.interceptors.request.use((request) => {
+              if (!('showProgressBar' in request)) request.showProgressBar = applyOnHttp
+              if (request.showProgressBar) initProgress()
+              return request
+            }, (error) => {
+              return Promise.reject(error)
+            })
+
+            axios.interceptors.response.use((response) => {
+              if (response.config.showProgressBar) increase()
+              return response
+            }, (error) => {
+              if (error.config && error.config.showProgressBar) increase()
+              return Promise.reject(error)
+            })
+          }
         }
 
         const router = applyOnRouter && this.$options.router
@@ -100,6 +120,10 @@ function NProgress(options) {
 }
 
 NProgress.install = install
+
+NProgress.start = function () {
+
+}
 
 Object.assign(NProgress.prototype, nprogress, {
   init (app) {

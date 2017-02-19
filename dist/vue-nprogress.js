@@ -1,5 +1,5 @@
 /*!
- * nprogress v0.1.4
+ * nprogress v0.1.5
  * https://github.com/vue-bulma/nprogress
  * Released under the MIT License.
  */
@@ -80,17 +80,37 @@ function install(Vue) {
           _this._nprogress = np;
           np.init(_this);
 
-          var http = applyOnHttp && Vue.http;
-          if (http) {
-            http.interceptors.push(function (request, next) {
-              var showProgressBar = 'showProgressBar' in request ? request.showProgressBar : applyOnHttp;
-              if (showProgressBar) initProgress();
+          if (applyOnHttp) {
+            var http = Vue.http;
+            var axios = Vue.axios;
 
-              next(function (response) {
-                if (!showProgressBar) return response;
-                increase();
+            if (http) {
+              http.interceptors.push(function (request, next) {
+                var showProgressBar = 'showProgressBar' in request ? request.showProgressBar : applyOnHttp;
+                if (showProgressBar) initProgress();
+
+                next(function (response) {
+                  if (!showProgressBar) return response;
+                  increase();
+                });
               });
-            });
+            } else if (axios) {
+              axios.interceptors.request.use(function (request) {
+                if (!('showProgressBar' in request)) request.showProgressBar = applyOnHttp;
+                if (request.showProgressBar) initProgress();
+                return request;
+              }, function (error) {
+                return Promise.reject(error);
+              });
+
+              axios.interceptors.response.use(function (response) {
+                if (response.config.showProgressBar) increase();
+                return response;
+              }, function (error) {
+                if (error.config && error.config.showProgressBar) increase();
+                return Promise.reject(error);
+              });
+            }
           }
 
           var router = applyOnRouter && _this.$options.router;
@@ -123,6 +143,8 @@ function NProgress(options) {
 }
 
 NProgress.install = install;
+
+NProgress.start = function () {};
 
 Object.assign(NProgress.prototype, nprogress, {
   init: function (app) {
