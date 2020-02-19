@@ -34,7 +34,7 @@ import App from './App.vue'
 
 Vue.use(NProgress)
 
-const nprogress = new NProgress({ parent: '.nprogress-container' })
+const nprogress = new NProgress()
 
 const app = new Vue({
   nprogress
