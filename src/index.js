@@ -85,7 +85,7 @@ function install(Vue, options = {}) {
               if (response.config.showProgressBar) increase()
               return response
             }, (error) => {
-              if (error.config && error.config.showProgressBar) increase()
+              if ((error.config && error.config.showProgressBar) || axios.isCancel(error)) increase()
               return Promise.reject(error)
             })
           }
