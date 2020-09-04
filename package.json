@@ -1,6 +1,6 @@
 {
   "name": "vue-nprogress",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "Slim progress bars is based on nprogress for Ajax'y applications",
   "repository": "vue-bulma/nprogress",
   "scripts": {
